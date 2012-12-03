@@ -1,0 +1,7 @@
+sourcePrefix = 'DjM1g5Vt9R'
+feature_label = createLabelFeatureCombo(sourcePrefix);
+feature_label_small = choseRandomRows(feature_label, .01);
+
+emily = drawAFriendFileName(sourcePre, 'P')
+t = classregtree(feature_label_small(:,1:10), feature_label_small(:,11));
+predication = predictImage('', emily, t);
