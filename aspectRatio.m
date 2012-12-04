@@ -1,7 +1,7 @@
 function [ newImage, offset_width, offset_height ] = aspectRatio( image, new_width, new_height )
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
-[width, height] = getCorrectScale(image, new_width, new_height)
+[width, height] = getCorrectScale(image, new_width, new_height);
 newImage = imresize(image, [height, width]);
 [height, width, dim] = size(newImage);
 
@@ -12,11 +12,11 @@ end
 
 
 function [ width, height ] = getCorrectScale(image, new_width, new_height)
-[height, width, dim] = size(image)
+[height, width, dim] = size(image);
 ratio = width/height;
 
-height_scale = new_height/height
-width_scale = new_width/width
+height_scale = new_height/height;
+width_scale = new_width/width;
 
 if ( height_scale < width_scale )
     width = NaN;
