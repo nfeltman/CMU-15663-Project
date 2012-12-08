@@ -1,11 +1,9 @@
-function [ strokeType ] = clasifyStrokes( prefix )
+function [ strokeType, face, nose, mouth, eyes, eyePairSmall, upperBody ] = clasifyStrokes( prefix )
 %UNTITLED4 Summary of this function goes here
 %   Detailed explanation goes here
-    [ face, nose, mouth, leftEye, rightEye, eyePairSmall, upperBody ] = getFaceFeatures( prefix );
+    [ face, nose, mouth, eyes, eyePairSmall, upperBody ] = getFaceFeatures( prefix );
     [~,X, Y] = getPositionsAdjusted(prefix);
         
-    eye = [leftEye; rightEye];
-   
     strokeType = zeros(size(X,1), 1);
     
     for strokeIndex = 1:size(X,1)
@@ -13,10 +11,14 @@ function [ strokeType ] = clasifyStrokes( prefix )
        Xs = X{strokeIndex};
        Ys = Y{strokeIndex};
       
+       
        nosePer = classifyStrokeWithFeatureAndRectangles(Xs, Ys, nose);
+       
        mouthPer = classifyStrokeWithFeatureAndRectangles(Xs, Ys, mouth);
-       eyePer = classifyStrokeWithFeatureAndRectangles(Xs, Ys, eye);
-       facePer = classifyStrokeWithFeatureAndRectangle(Xs, Ys, face)
+       
+       eyePer = classifyStrokeWithFeatureAndRectangles(Xs, Ys, eyes);
+       
+       facePer = classifyStrokeWithFeatureAndRectangles(Xs, Ys, face);
        
        featurePercent = [];
        featurePercent(enumFeature('nose')) = nosePer;
@@ -46,22 +48,6 @@ function [ percent ] = classifyStrokeWithFeatureAndRectangles(Xs, Ys, rectangles
     end
 end
 
-function [ percent ] = classifyStrokeWithFeatureAndRectangle(Xs, Ys, rectangle)
-    x_min = rectangle(1);
-    y_min = rectangle(2);
-    x_max = rectangle(3) + x_min;
-    y_max = rectangle(4) + y_min;
-
-    
-    gtX = Xs > x_min;
-    gtY = Ys > y_min;
-    ltX = Xs < x_max;
-    ltY = Ys < y_max;
-    
-    insideBox = gtX & gtY & ltX & ltY;
-    
-    percent = sum(insideBox) ./ size(insideBox,1);
-end
 
 
 

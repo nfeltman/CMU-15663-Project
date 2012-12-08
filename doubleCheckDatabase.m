@@ -5,12 +5,16 @@ function [ badID ] = doubleCheckDatabase( objectids )
     ignoreFile = fopen('ignore.txt', 'at');
 
     for objectIDIndex = 1:numberOfObjectIDs
-        drawImageWithPrefix(objectids(objectIDIndex,:))
+        objectID = objectids(objectIDIndex,:);
+        disp(objectID);
+        drawImageWithPrefix(objectID)
+        figure();
+        testFace(objectID);
         
-        reply = input('Is this a good drawing? Y/N [Y]: ', 's')
+        reply = input('Is this a good drawing? Y/N [Y]: ', 's');
         
         if ( strcmp(reply, '') )
-            reply = 'Y'
+            reply = 'Y';
         end
 
         if reply == 'N'

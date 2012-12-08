@@ -6,31 +6,19 @@ function [ output_args ] = testFace( prefix )
     imshow(image_resize);
     
     hold on
-        displayRectangleAroundFeature('Nose', colorFromFeatureEnum(enumFeature('nose')),image_resize);
-        %displayRectangleAroundFeature('UpperBody', 'yellow',image_resize);
-        displayRectangleAroundFeature('LeftEye', colorFromFeatureEnum(enumFeature('eye')),image_resize);
-        displayRectangleAroundFeature('RightEye', colorFromFeatureEnum(enumFeature('eye')),image_resize);
-        %displayRectangleAroundFeature('EyePairSmall', 'c',image_resize);
-        displayRectangleAroundFeature('Mouth', colorFromFeatureEnum(enumFeature('mouth')),image_resize);
-        displayRectangleAroundFeature('FrontalFaceCART', 'black',image_resize);
+    [ face, nose, mouth, eye, eyePairSmall, upperBody ] = getFaceFeatures( prefix );
+        displayRectangleAroundFeature('nose', nose);    
+        displayRectangleAroundFeature('eye', eye);
+        displayRectangleAroundFeature('mouth',mouth);
+        displayRectangleAroundFeature('face',face);
     hold off
-    
-
-
 end
 
-function [ ] = displayRectangleAroundFeature(feature, colorType, image)
-    detector = vision.CascadeObjectDetector(feature);
-    bboxes = step(detector, image)
-    
-    if ( size(bboxes,1) == 0 )
-       disp(['No: ', feature] );
-       return;
-    end
-    
-    
-    for boxIndex = 1:size(bboxes,1)
-       rectangle('Position',bboxes(boxIndex,:), 'EdgeColor', colorType);        
-    end
+function [ ] = displayRectangleAroundFeature(featureType, bboxes)
+    colorType = colorFromFeatureEnum(enumFeature(featureType));
+        
+   for boxIndex = 1:size(bboxes,1)
+      rectangle('Position',bboxes(boxIndex,:), 'EdgeColor', colorType);        
+   end
 end
 
