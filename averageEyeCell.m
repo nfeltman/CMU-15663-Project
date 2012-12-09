@@ -1,18 +1,13 @@
 function [ averageEye ] = averageEyeCell( eyeCell )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
-
-    sumSize = [0 0];
-    for eyeCellIndex = 1:size(eyeCell,2)
-       sumSize = sumSize + size(eyeCell{eyeCellIndex});
-    end
+    resizedEyeCell = resizeImageCell(eyeCell);
     
-    averageSize = round(sumSize ./ size(eyeCell,2))
-    
-    averageEye = double(zeros(averageSize));
+    averageEye = double(zeros(size(resizedEyeCell{1})));
+    size(averageEye)
     
     for eyeCellIndex = 1:size(eyeCell,2)
-       averageEye = averageEye + im2double(imresize(eyeCell{eyeCellIndex}, averageSize));
+       averageEye = averageEye + im2double(resizedEyeCell{eyeCellIndex});
     end
     
     averageEye = averageEye ./ size(eyeCell,2);
