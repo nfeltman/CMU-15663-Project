@@ -1,4 +1,4 @@
-function [ objectID, drawerID, guesserID, modelID ] = drawAFriendMetaData( metaDataFile )
+function [ objectID, drawerID, guesserID, modelID, newset, accuracy ] = drawAFriendMetaData( metaDataFile )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
     fileID = fopen(metaDataFile);
@@ -12,5 +12,7 @@ function [ objectID, drawerID, guesserID, modelID ] = drawAFriendMetaData( metaD
     drawerID = C{3};
     guesserID = C{4};
     modelID = C{5};
+    newset = strcmp('(null)',C{7});
+    accuracy = cell2mat(C{8});
 end
 
