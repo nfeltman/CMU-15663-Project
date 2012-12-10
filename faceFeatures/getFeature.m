@@ -21,8 +21,10 @@ function [index, cell] = populateEyeCell( image, features, X, Y, strokeTypes, in
         [adjustedX, ~, ~] = strokesInFeature(X, Y, strokeTypes, feature);
         if ( size(adjustedX, 1) > 0 )
             eyeSubImage = im2double(subImageFromFeature(image, feature));
-            cell{index} = eyeSubImage;
-            index = index + 1;
+            if ( size(eyeSubImage,1) > 0 )
+                cell{index} = eyeSubImage;
+                index = index + 1;
+            end
         end
     end
 end
@@ -45,7 +47,20 @@ function [inFeatureX, inFeatureY, inStrokeType] = strokesInFeature(X, Y, strokeT
 end
 
 function [subImage] = subImageFromFeature(image, feature)
-    subImage = image(feature(2):feature(2) + feature(4), feature(1):feature(1) + feature(3),:);
+    minY = feature(2);
+    maxY = feature(2) + feature(4);
+    minX = feature(1);
+    maxX = feature(1) + feature(3);
+    
+    if ( isInBounds(image, minX, minY, maxX, maxY) )
+        subImage = image(minY:maxY, minX:maxX,:);
+    else
+       subImage = []; 
+    end
+end
+
+function [inBounds] = isInBounds(image, minX, minY, maxX, maxY)
+    inBounds = minX > 0 && minY > 0 && maxX <= size(image,2) && maxY <= size(image,1);
 end
 
 
