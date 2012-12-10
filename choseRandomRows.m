@@ -1,9 +1,9 @@
-function [ smaller_matrix ] = choseRandomRows( matrix, percentage )
+function [ smallFeature, smallLabel ] = choseRandomRows( features, labels, pZero, pOne )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
-    [rows, cols] = size(matrix);
-    random_rows = rand(rows, 1);
-    random_rows = random_rows < percentage;
-    smaller_matrix = matrix(random_rows, :);
+    n = size(features,1);
+    selection = (labels == 0 & rand(n, 1) < pZero) | (labels == 1 & rand(n, 1) < pOne);
+    smallFeature = features(selection, :);
+    smallLabel = labels(selection);
 end
 
