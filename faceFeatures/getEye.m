@@ -1,12 +1,13 @@
-function [ newEyeIndex ] = getEye( prefix, eyeIndex, eyeCell )
+function [ eyeIndex, eyeCell ] = getEye( prefix, eyeIndex, eyeCell )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
         newEyeIndex = eyeIndex;
        [image_resize,X, Y] = getPositionsAdjusted(prefix);
-       [strokeTypes, face, nose, mouth, eyes, eyePairSmall, upperBody] = clasifyStrokes(prefix);    
+       [strokeTypes, features] = clasifyStrokes(prefix);    
        X_eye = X(strokeTypes == enumFeature('eye'), :);
        Y_eye = Y(strokeTypes == enumFeature('eye'), :);
        strokeTypes_eye = strokeTypes(strokeTypes == enumFeature('eye'),:);
+       eye = features{enumFeature('eye')};
        
        drawingWithPadding = getAdjustedDrawing(prefix, X, Y);
        if ( size(drawingWithPadding, 1) == 0)
@@ -14,14 +15,15 @@ function [ newEyeIndex ] = getEye( prefix, eyeIndex, eyeCell )
        end
        
        
-       newEyeIndex = subplotFeatures(drawingWithPadding, eyes, X, Y, strokeTypes, eyeIndex, prefix);
+       %newEyeIndex = subplotFeatures(drawingWithPadding, eyes, X, Y, strokeTypes, eyeIndex, prefix);
+       [eyeIndex, eyeCell] = populateEyeCell(drawingWithPadding, eye, X, Y, strokeTypes, eyeIndex, eyeCell, prefix);
        
-       eyeOnes = setOnesWhereBoxesAre(image_resize, eyes);
+       %eyeOnes = setOnesWhereBoxesAre(image_resize, eyes);
        
-       testEye = drawingWithPadding(1:size(eyeOnes,1), 1:size(eyeOnes,2));
-       size(testEye)
-       size(eyeOnes)
-       testEye(~eyeOnes(:,:,1)) = 0;
+       %testEye = drawingWithPadding(1:size(eyeOnes,1), 1:size(eyeOnes,2));
+       %size(testEye)
+       %size(eyeOnes)
+       %testEye(~eyeOnes(:,:,1)) = 0;
        
       % imshow(testEye);
        
@@ -46,13 +48,22 @@ function [newOnes] = setOnesWhereBoxesAre(image, features)
 
 end
 
-function [eyeIndex, eyeCell] = populateEyeCell( image, features, eyeIndex, eyeCell, prefix)
-
+function [eyeIndex, eyeCell] = populateEyeCell( image, features, X, Y, strokeTypes, eyeIndex, eyeCell, prefix)
+    numberOfFeatures = size(features,1);
+    for featureIndex = 1:numberOfFeatures
+        feature  = features(featureIndex,:);
+        [adjustedX, adjustedY, adjustedStrokeType] = strokesInFeature(X, Y, strokeTypes, feature);
+        if ( size(adjustedX, 1) > 0 )
+            [adjustedX, adjustedY] = adjustStrokesByFeature(feature, adjustedX, adjustedY);    
+            eyeSubImage = im2double(subImageFromFeature(image, feature));
+            eyeCell{eyeIndex} = eyeSubImage;
+            eyeIndex = eyeIndex + 1;
+        end
+        
+    end
 
 end
     
-
-end
 
 function [eyeIndex] = subplotFeatures(image, features, X, Y, strokeTypes, eyeIndex, prefix)
     numberOfFeatures = size(features,1);
@@ -85,20 +96,4 @@ function [adjustedX, adjustedY] = adjustStrokesByFeature(feature, X, Y)
     end
 end
 
-function [inFeatureX, inFeatureY, inStrokeType] = strokesInFeature(X, Y, strokeType, feature)
-    includeStroke = zeros(size(X,1), 1);
-    
-    for strokeIndex = 1:size(X,1)
-        percent = classifyStrokeWithFeatureAndRectangle(X{strokeIndex}, Y{strokeIndex}, feature);
-        if ( percent < .5 )
-           includeStroke(strokeIndex, 1) = 0;
-        else
-           includeStroke(strokeIndex, 1) = 1;            
-        end
-    end
-    
-    inFeatureX = X(includeStroke ==1);
-    inFeatureY = Y(includeStroke ==1);
-    inStrokeType = strokeType(includeStroke == 1);
-end
 
