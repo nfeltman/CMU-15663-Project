@@ -21,6 +21,10 @@ function [F] = getDotProductFeature(M, im, sigma1, sigma2)
     blurred = conv2(im,g,'same');
     gradX = conv2(blurred,[-1 1],'same');
     gradY = conv2(blurred,[-1; 1],'same');
+    mag = sqrt(gradX.^2 + gradY.^2);
+    mag = mag + max(mag(1:end))*0.05;
+    gradX = gradX./mag;
+    gradY = gradY./mag;
     
     dotProd = abs(gradX.*dY - gradY.*dX);
     imagesc(dotProd);
