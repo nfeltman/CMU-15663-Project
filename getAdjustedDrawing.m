@@ -12,14 +12,6 @@ function [ drawing ] = getAdjustedDrawing(prefix, X, Y  )
     [prefixDrawing, ~, ~] = imread(drawingFileName);
     prefixDrawingGray = rgb2gray(prefixDrawing);
     prefixDrawingGray = im2double(prefixDrawingGray);
-    [x, y] = getMinimumStrokeLocation(X, Y);
-    
-    x = max(1,floor(x));
-    y = max(1,floor(y));
-    xEnd = x+size(prefixDrawingGray,2) - 1;
-    yEnd = y+size(prefixDrawingGray,1) - 1;
-    drawing = ones(max(yEnd, 460), max(xEnd, 320));
-    drawing(y:yEnd,x:xEnd) = prefixDrawingGray;
-    
+    drawing = adjustMatrixToDrawing(prefixDrawingGray, X, Y);
 end
 

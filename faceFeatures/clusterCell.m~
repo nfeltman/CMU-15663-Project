@@ -2,14 +2,12 @@ function [ clusters ] = clusterCell( cell, numberOfClusters )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
     cell = resizeImageCell(cell);
-    blurredCell = blurImageCells(cell, 8);
-    %blurredCell = scaleImageCells(cell, .5);
+    %blurredCell = blurImageCells(cell, 8);
+    blurredCell = scaleImageCells(cell, .5);
     kMeansFeatures = createKMeansFeatureFromCell(blurredCell);
     
    % options = statset('CovType', 'diagonal');
-   size(kMeansFeatures)
-    clusters = gmdistribution.fit(kMeansFeatures,numberOfClusters,'CovType','diagonal');
-    clusters = clusters.cluster(kMeansFeatures);
+    clusters = gmdistribution.fit(kMeans,2,'CovType','diagonal');
     
     %clusters = kmeans(kMeansFeatures,numberOfClusters);
     

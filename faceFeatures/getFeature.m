@@ -11,18 +11,25 @@ function [ index, cell ] = getFeature( index, cell, strokeTypes, features, enumF
        feature = features{enumFeatureIndex};
        
        %newEyeIndex = subplotFeatures(drawingWithPadding, eyes, X, Y, strokeTypes, eyeIndex, prefix);
-       [index, cell] = populateEyeCell(drawingWithPadding, feature, X, Y, strokeTypes, index, cell);
+       [index, cell] = populateEyeCell(prefix,drawingWithPadding, feature, X, Y, strokeTypes, index, cell);
+       
 end
 
-function [index, cell] = populateEyeCell( image, features, X, Y, strokeTypes, index, cell)
+function [index, cell] = populateEyeCell( prefix,image, features, X, Y, strokeTypes, index, cell)
+   %[imFlowX, imFlowY] = createImageFlow(prefix);
+    
     numberOfFeatures = size(features,1);
     for featureIndex = 1:numberOfFeatures
         feature  = features(featureIndex,:);
         [adjustedX, ~, ~] = strokesInFeature(X, Y, strokeTypes, feature);
         if ( size(adjustedX, 1) > 0 )
             eyeSubImage = im2double(subImageFromFeature(image, feature));
+            %imFlowXSub = subImageFromFeature(imFlowX, feature);
+            %imFlowYSub = subImageFromFeature(imFlowY, feature);
+            
             if ( size(eyeSubImage,1) > 0 )
                 cell{index} = eyeSubImage;
+                %cell{index} = [imFlowXSub, imFlowYSub];
                 index = index + 1;
             end
         end

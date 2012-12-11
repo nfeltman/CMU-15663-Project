@@ -16,9 +16,20 @@ starts = zeros(totalNumSegs,2);
 ends = zeros(totalNumSegs,2);
 
 segsProcessed = 0;
+
+
 for k = 1:numStrokes,
     segs = [X{k} Y{k}];
+    
     n = size(segs,1)-1;
+
+    if ( n < 0 )
+        starts = [];
+        ends = [];
+        im = [];
+        return;
+    end
+
     starts(segsProcessed + (1:n), :) = segs(1:end-1,:);
     ends(segsProcessed + (1:n), :) = segs(2:end,:);
     segsProcessed = segsProcessed + n;
