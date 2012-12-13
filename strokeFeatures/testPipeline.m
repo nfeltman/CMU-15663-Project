@@ -1,15 +1,18 @@
-function testPipeline( prefix, sigma, nu, spacing, scale )
-[starts, ends, im ] = getAllSegments(prefix);
-[locs, deltas, w] = getControlPoints(starts, ends,3);
-dx = deltas(:,1); dy = deltas(:,2);
-[dx, dy] = doubleWrap(dx,dy);
-M = rasterizeSamples([size(im,1) size(im,2)],locs,[dx dy],w);
-[X, Y] = blurAndHomogenize( M, sigma, nu );
-[X, Y] = unwrapSlope(X,Y);
+function testPipeline( prefix, nu, method, sigma, spacing, scale )
+[strokes, im ] = getInBoundStrokes(prefix);
+imsize = [size(im,1) size(im,2)];
+strokes = filterDuplicatePoints(strokes);
+strokes = cellmap(@(s)splitLongSegs(s,1), strokes);
+segFeatures = vertCatCells(cellmap(@getFeatures, strokes));
+
+% create the unwrapped slope field
+[X,Y] = createSlopeField(segFeatures(:,3:4), segFeatures(:,1:2), imsize, nu, method, sigma);
+
+% show results
 gcf;
 hold on;
 %imshow(im); 
-plot([starts(:,1) ends(:,1)]', [starts(:,2) ends(:,2)]','-k','LineWidth',1.5);
+plot(segFeatures(:,[5 7])', segFeatures(:,[6 8])', '.-k','LineWidth',1.5);
 %scatter(locs(:,1),locs(:,2),'.g');
 plotFlow(X,Y,spacing,scale); 
 axis('equal')
@@ -17,3 +20,8 @@ set(gca,'xtick',[],'ytick',[],'YDir','reverse')
 hold off;
 end
 
+function f = getFeatures(s)
+    centers = getSegCenters(s);
+    deltas = getSegDeltas(s);
+    f = [ deltas, centers, centers-deltas/2, centers+deltas/2];
+end

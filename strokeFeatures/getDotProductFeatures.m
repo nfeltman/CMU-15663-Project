@@ -1,21 +1,22 @@
 function [F] = getDotProductFeatures(prefix)
 
-    [starts, ends, im ] = getAllSegments(prefix);
-    [locs, deltas, w] = getControlPoints(starts, ends,3);
-    dx = deltas(:,1); dy = deltas(:,2);
-    [dx, dy] = doubleWrap(dx,dy);
-    M = rasterizeSamples([size(im,1) size(im,2)],locs,[dx dy],w);
+    [strokes, im ] = getInBoundStrokes(prefix);
+    imsize = [size(im,1) size(im,2)];
+    strokes = filterDuplicatePoints(strokes);
+    strokes = cellmap(@(s)splitLongSegs(s,1), strokes);
+    segFeatures = vertCatCells(cellmap(@getFeatures, strokes));
+
+    % create the unwrapped slope field
+    [X,Y] = createSlopeField(segFeatures(:,3:4), segFeatures(:,1:2), imsize, 0.05, 'lsq', 2);
     
     im = rgb2gray(im2double(im));
     im = im - mean(im(1:end));
     im = im / std(im(1:end));
     
-    getDotProductFeature(M,im,3,4);
+    getDotProductFeature(X,Y,im,2);
 end
 
-function [F] = getDotProductFeature(M, im, sigma1, sigma2)
-    [dX, dY] = blurAndHomogenize( M, sigma1, 0.05 );
-    [dX, dY] = unwrapSlope(dX,dY);
+function [F] = getDotProductFeature(dX, dY, im, sigma2)
     
     g = fspecial('gaussian',ceil(sigma2*2.5)*2+1,sigma2);
     blurred = conv2(im,g,'same');
@@ -30,4 +31,10 @@ function [F] = getDotProductFeature(M, im, sigma1, sigma2)
     parallelness = abs(gradX.*dX + gradY.*dY);
     %plotFlow(gradX,gradY,2,1.8);
     imagesc(perpendicularity);
+end
+
+function f = getFeatures(s)
+    centers = getSegCenters(s);
+    deltas = getSegDeltas(s);
+    f = [ deltas, centers, centers-deltas/2, centers+deltas/2];
 end
