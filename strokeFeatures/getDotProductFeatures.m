@@ -22,10 +22,12 @@ function [F] = getDotProductFeature(M, im, sigma1, sigma2)
     gradX = conv2(blurred,[-1 1],'same');
     gradY = conv2(blurred,[-1; 1],'same');
     mag = sqrt(gradX.^2 + gradY.^2);
-    mag = mag + max(mag(1:end))*0.05;
+    mag = mag + mean(mag(1:end))*0.5;
     gradX = gradX./mag;
     gradY = gradY./mag;
     
-    dotProd = abs(gradX.*dY - gradY.*dX);
-    imagesc(dotProd);
+    perpendicularity = abs(gradX.*dY - gradY.*dX);
+    parallelness = abs(gradX.*dX + gradY.*dY);
+    %plotFlow(gradX,gradY,2,1.8);
+    imagesc(perpendicularity);
 end
