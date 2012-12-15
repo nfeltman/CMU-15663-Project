@@ -2,7 +2,8 @@ function [  ] = drawImageWithPrefix( imagePrefix )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
     [image_resize,X, Y] = getPositionsAdjusted(imagePrefix);
-    strokeTypes = clasifyStrokes(imagePrefix);
+    %strokeTypes = clasifyStrokes(imagePrefix);
+    strokeTypes = [];
     
     if size(X,1) > 0 
         imshow(image_resize);

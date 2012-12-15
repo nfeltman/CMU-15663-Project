@@ -9,11 +9,11 @@ function [  ] = drawImageStrokes( X, Y, strokeTypes )
    for strokeIndex = 1:numberOfStrokes
 %   for strokeIndex = 34
  
-        strokeType = strokeTypes(strokeIndex);
+       % strokeType = strokeTypes(strokeIndex);
        
        % colorIndex = ceil(strokeIndex/strokeValue);
        % color = colorMap(colorIndex,:);
-        color = colorFromFeatureEnum(strokeType);
+        %color = colorFromFeatureEnum(strokeType);
        
         X_stroke = X(strokeIndex);
         X_stroke = X_stroke{1};
@@ -21,7 +21,7 @@ function [  ] = drawImageStrokes( X, Y, strokeTypes )
         Y_stroke = Y(strokeIndex);
         Y_stroke = Y_stroke{1};
         
-        color = 'black';
+        color = 'yellow';
         
         line(X_stroke, Y_stroke, 'Color', color );
         %imline(gca, X_stroke - offset_width, Y_stroke - offset_height);
