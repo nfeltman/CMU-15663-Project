@@ -12,7 +12,7 @@ for k = 1:numStrokes,
     else
         % check for duplicates
         duplicates = all(points(1:end-1,:) == points(2:end,:),2);
-        points = points(~duplicates,:);
+        points = points([~duplicates; true],:);
         strokes{k} = points;
 
         if size(points,2) == 0, 

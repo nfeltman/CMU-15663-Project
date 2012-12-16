@@ -2,33 +2,45 @@ function [ output_args ] = partitionStrokes( strokes )
 %PARTITIONSTROKES Summary of this function goes here
 %   Detailed explanation goes here
 
+if numel(strokes)==0,
+    error('No stroke data!');
+end
+
 smooth = @(o) cconv(o,[0.25 0.5 0.25],size(o,2)); %note that this shifts the values
 
-ori =  cell2mat(cellmap(@(s)smooth(smooth(strokeOrrientation(s))), strokes));
-diffO = sqrt(sum((ori(2:end,:) - ori(1:end-1,:)).^2,2));
+numbins = 16;
+ori =  cell2mat(cellmap(@(s)smooth(smooth(strokeOrientation(s, numbins))), strokes));
+first = ori(2:end,:);
+second = ori(1:end-1,:);
+diffO1 = sum(abs(first - second),2);
+diffO2 = sum(abs(first - circshift(second,[0 -1])),2);
+diffO3 = sum(abs(first - circshift(second,[0 1])),2);
+diffO = min([diffO1 diffO2 diffO3],[], 2);
+cut = diffO > 0.8;
 
- ori2 =  cell2mat(cellmap(@(s)(strokeOrrientation(s)), strokes));
- diffO2 = sqrt(sum((ori2(2:end,:) - ori2(1:end-1,:)).^2,2));
-figure; imagesc(ori2);
+% ori2 =  cell2mat(cellmap(@(s)(strokeOrientation(s)), strokes));
+% diffO2 = sum(abs(ori2(2:end,:) - ori2(1:end-1,:)),2);
+% figure; image(ori2*50);
 figure; imagesc(ori);
-
-
+figure; plot([diffO1 diffO]);
+% 
 cen =  cell2mat(cellmap(@getWeightedCentroid, strokes));
-
-deltaC = getSegDeltas(cen);
-leftDiff = sqrt(sum((ori(2:end,:) - ori(1:end-1,:)).^2,2));
-
+% 
+% deltaC = getSegDeltas(cen);
+% leftDiff = sqrt(sum((ori(2:end,:) - ori(1:end-1,:)).^2,2));
+% 
 
 %plot(cen(:,1 ),cen(:,2));
 
 %diffC = diffC/max(diffC);
-figure; plot([diffO diffO2])
-
-figure;
-drawImageStrokes(strokes,1:65,'cluster');
-hold on;
-plot(cen(:,1),cen(:,2),'o-');
-hold off;
+% 
+% figure;
+labels = cumsum([1 cut']);
+p = randperm(labels(end));
+figure; drawImageStrokes(strokes,p(labels),'cluster');
+% hold on;
+% plot(cen(:,1),cen(:,2),'o-');
+% hold off;
 fixAxes;
 end
 
@@ -42,25 +54,16 @@ c = sum(centers .* (lengths*[1 1]),1)/sum(lengths);
 
 end
 
-function [ bucketValues ] = strokeOrientation( stroke )
-    stroke = convulveStrokes(stroke, 10);
+function [ bucketValues ] = strokeOrientation( stroke, numbins )
+    stroke = convulveStrokes(stroke, 4);
     deltas = getSegDeltas(stroke);
-    diffRatio = abs(deltas(:,1)./deltas(:,2));
-    angles = atan(diffRatio);
-    
-    [bucketValues, buckets] = hist(angles,-pi/2:.1:pi/2);
-    [~, modeAngleIndex] = max(bucketValues);
-    modeAngle = buckets(modeAngleIndex);
-    
-    angles = angles - modeAngle;
-
-    anglesLessThanPi2 = angles <= -1*pi/2;
-    angles(anglesLessThanPi2) = angles(anglesLessThanPi2) + pi;
-    
-    angleMoreThanPi2 = angles >= pi/2;
-    angles(angleMoreThanPi2)  = angles(angleMoreThanPi2) - pi;
-    
-    [bucketValues, ~] = hist(angles,-pi/2:.1:pi/2);
+    len = sqrt(sum(deltas.^2,2));
+    angles = atan2(deltas(:,2),deltas(:,1));
+    binsize = 2*pi/numbins;
+    indeces = ceil((angles+pi)/binsize);
+    bucketValues = accumarray(indeces,len,[numbins 1])';
+    if sum(bucketValues) == 0,
+        bucketValues = ones(1,numbins);
+    end
     bucketValues = bucketValues / sum(bucketValues);
-     
 end

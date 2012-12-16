@@ -5,8 +5,6 @@ function [  ] = drawImageStrokes( strokes, strokeTypes, drawType)
     numberOfColors = 32;
     strokeValue = ceil(numberOfStrokes/numberOfColors);
     colorMap = jet(32);
-
-    size(strokes)
     
    for strokeIndex = 1:numberOfStrokes
 %   for strokeIndex = 34
