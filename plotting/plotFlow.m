@@ -28,7 +28,5 @@ function plotFlow( X, Y, sparsity, arrowscale )
     
     quiver(mXb,mYb,u,v,'.r','AutoScale','off');
 %    hold on; scatter(mX,mY,'.'); hold off;
-    axis('equal')
-    set(gca,'xtick',[],'ytick',[],'YDir','reverse')
 end
 

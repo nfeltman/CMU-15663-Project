@@ -5,6 +5,8 @@ strokes = filterDuplicatePoints(strokes);
 strokes = cellmap(@(s)splitLongSegs(s,1), strokes);
 segFeatures = vertCatCells(cellmap(@getFeatures, strokes));
 
+if numel(im) == 0, error('image not found'); end
+
 % create the unwrapped slope field
 [X,Y] = createSlopeField(segFeatures(:,3:4), segFeatures(:,1:2), imsize, nu, method, sigma);
 
@@ -14,10 +16,8 @@ hold on;
 %imshow(im); 
 plot(segFeatures(:,[5 7])', segFeatures(:,[6 8])', '.-k','LineWidth',1.5);
 %scatter(locs(:,1),locs(:,2),'.g');
-plotFlow(X,Y,spacing,scale); 
-axis('equal')
-set(gca,'xtick',[],'ytick',[],'YDir','reverse')
-hold off;
+plotFlow(X,Y,spacing,scale);
+fixAxes();
 end
 
 function f = getFeatures(s)
