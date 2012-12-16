@@ -15,7 +15,13 @@ for k = 1:numStrokes,
     totalNumSegs = totalNumSegs + size(strokes{k},1) - 1;
 end
 
-allSegs = zeros(totalNumSegs,size(strokes{1},2));
+if isfloat(strokes{1})
+    allSegs = zeros(totalNumSegs,size(strokes{1},2));
+elseif iscell(strokes{1})
+    allSegs = cell(totalNumSegs,size(strokes{1},2));
+else
+    error('Unrecognized class!');
+end
 
 segsProcessed = 0;
 for k = 1:numStrokes,
