@@ -5,6 +5,8 @@ function [  ] = drawImageStrokes( strokes, strokeTypes, drawType)
     numberOfColors = 32;
     strokeValue = ceil(numberOfStrokes/numberOfColors);
     colorMap = jet(32);
+
+    size(strokes)
     
    for strokeIndex = 1:numberOfStrokes
 %   for strokeIndex = 34
@@ -16,7 +18,7 @@ function [  ] = drawImageStrokes( strokes, strokeTypes, drawType)
         %color = colorFromFeatureEnum(strokeType);
         stroke = strokes{strokeIndex};
         
-
+        
         X_stroke = stroke(:,1);        
         Y_stroke = stroke(:,2);
         

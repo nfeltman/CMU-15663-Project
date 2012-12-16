@@ -13,7 +13,7 @@ function [  ] = drawImageWithPrefix( imagePrefix )
         %imshow(image_resize);
         imshow(zeros(size(image_resize)));
         hold on
-        drawImageStrokes(X,Y, strokeTypes, 'length');
+        drawImageStrokes(X,Y, strokeTypes, 'none');
         hold off;
     end
 end
