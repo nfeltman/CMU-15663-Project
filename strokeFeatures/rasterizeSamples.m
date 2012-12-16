@@ -8,7 +8,9 @@ M = zeros(siz(1), siz(2), n);
 for k = 1:size(locs,1),
     x = locs(k,1);
     y = locs(k,2);
-    M(y,x,:) = M(y,x,:) + reshape(values(k,:),1,1,n);
+    if x >= 1 && x <= siz(2) && y >= 1 && y <= size(1), 
+        M(y,x,:) = M(y,x,:) + reshape(values(k,:),1,1,n);
+    end
 end
 
 end
