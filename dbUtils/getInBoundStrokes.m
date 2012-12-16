@@ -14,7 +14,7 @@ for k = 1:size(X,1),
     
     % mark the stroke invalid if it has no segments
     if ~all(inBounds) && ~imageDoesntExist
-        strokeValid = false; 
+        strokeValid(k,1) = false; 
     end
     
     strokes{k} = [X{k}, Y{k}];
