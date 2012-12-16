@@ -4,4 +4,5 @@ path(path,[pwd filesep 'faceFeatures']);
 path(path,[pwd filesep 'dbUtils']);
 path(path,[pwd filesep 'fixUp']);
 path(path,[pwd filesep 'StrokeClustering']);
+path(path,[pwd filesep 'eyeLearning']);
 path(path,pwd);
