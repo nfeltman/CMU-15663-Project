@@ -1,4 +1,4 @@
-function [ X, Y ] = getPositions( strokeFile )
+function [ strokes] = getPositions( strokeFile )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
     fileID = fopen(strokeFile);
@@ -12,15 +12,15 @@ function [ X, Y ] = getPositions( strokeFile )
     strokeType = C{7};
     
     if ( size(X,1) == 0 )
-        X = [];
-        Y = [];
+        strokes = [];
         return;
     end
     
-    [X, Y] = splitStrokes(X, Y, strokeType);
+    [strokes] = splitStrokes(X, Y, strokeType);
 end
 
-function [newX, newY] = splitStrokes(X, Y, strokeType)
+function [strokes] = splitStrokes(X, Y, strokeType)
+    strokes = [X,Y];
     [X,Y, strokeType] = makeSureEndsInE(X,Y, strokeType);
     strokeArray = cell2mat(strokeType);
     
@@ -30,9 +30,8 @@ function [newX, newY] = splitStrokes(X, Y, strokeType)
     strokeEqual0 = [0;strokeEqual0];
     strokeEqual0Next = [strokeEqual0(2:size(strokeEqual0,1));0];
     strokeSize = strokeEqual0Next - strokeEqual0;
-    strokeSizeCut = strokeSize(1:size(strokeSize,1)-1);    
-    newX = mat2cell(X, strokeSizeCut',1);
-    newY = mat2cell(Y, strokeSizeCut',1);
+    strokeSizeCut = strokeSize(1:size(strokeSize,1)-1);  
+    strokes = mat2cell(strokes, strokeSizeCut',2);
 end
 
 function [X, Y, strokeType] = makeSureEndsInE(X, Y, strokeType)

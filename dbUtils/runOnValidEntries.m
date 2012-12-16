@@ -26,7 +26,7 @@ function output = runOnValidEntries( f )
         end
 
         if ( size(strokes,1) ~= 0)
-            output{objectIDIndex} = f(strokes, im_resize);
+            output{objectIDIndex} = f(strokes, im_resize, objectID);
         end
     end
 end

@@ -3,17 +3,9 @@ function [  ] = drawImageStrokes( strokes, strokeTypes, drawType)
 %   Detailed explanation goes here
     numberOfStrokes = size(strokes,1);
     numberOfColors = 32;
-    strokeValue = ceil(numberOfStrokes/numberOfColors);
-    colorMap = jet(32);
-    
-   for strokeIndex = 1:numberOfStrokes
+
+    for strokeIndex = 1:numberOfStrokes
 %   for strokeIndex = 34
- 
-       % strokeType = strokeTypes(strokeIndex);
-       
-       % colorIndex = ceil(strokeIndex/strokeValue);
-       % color = colorMap(colorIndex,:);
-        %color = colorFromFeatureEnum(strokeType);
         stroke = strokes{strokeIndex};
         
         
@@ -43,7 +35,10 @@ function [color] = getColorWithDrawType(drawType, strokeTypes, strokes, strokeIn
         else
             color = colorMap(strokeTypes(strokeIndex),:);
         end
+    elseif strcmp(drawType, 'face')
+        strokeType = strokeTypes(strokeIndex);
+        color = colorFromFeatureEnum(strokeType);        
     else
-        color = 'black';
+        color = 'white';
     end
 end

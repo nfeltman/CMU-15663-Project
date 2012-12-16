@@ -6,11 +6,12 @@ function [ output_args ] = testFace( prefix )
     imshow(image_resize);
     
     hold on
-    [ face, nose, mouth, eye, eyePairSmall, upperBody ] = getFaceFeatures( prefix );
-        displayRectangleAroundFeature('nose', nose);    
-        displayRectangleAroundFeature('eye', eye);
-        displayRectangleAroundFeature('mouth',mouth);
-        displayRectangleAroundFeature('face',face);
+   % [ face, nose, mouth, eye, eyePairSmall, upperBody ] = getFaceFeatures( prefix );
+    [ features ] = getFaceFeatures( prefix );
+        displayRectangleAroundFeature('nose', features{enumFeature('nose')});    
+        displayRectangleAroundFeature('eye', features{enumFeature('eye')});
+        displayRectangleAroundFeature('mouth',features{enumFeature('mouth')});
+        displayRectangleAroundFeature('face',features{enumFeature('face')});
     hold off
 end
 

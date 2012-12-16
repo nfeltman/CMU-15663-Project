@@ -9,9 +9,9 @@ function [ features ] = getFaceFeatures( image )
             [image,~,~] = aspectRatio(image, 320, 460);
         else
             % consider returning something else?
-            error('Image file not found! (consult comments here for fixes)');
-            %features = {};
-            %return;
+            warning('Image file not found! (consult comments here for fixes)');
+            features = {};
+            return;
         end
     end
 

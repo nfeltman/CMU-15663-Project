@@ -2,23 +2,26 @@ function [ strokeType, features ] = clasifyStrokes( prefix )
 %UNTITLED4 Summary of this function goes here
 %   Detailed explanation goes here
     [ features] = getFaceFeatures( prefix );
-    [~,X, Y] = getPositionsAdjusted(prefix);
-        
-    strokeType = zeros(size(X,1), 1);
     
-    for strokeIndex = 1:size(X,1)
+    if size(features,1) == 0
+       strokeType = [];
+       return;
+    end
+    [~,strokes] = getPositionsAdjusted(prefix);
+        
+    strokeType = zeros(size(strokes,1), 1);
+    
+    for strokeIndex = 1:size(strokes,1)
 %    for strokeIndex = 34
-       Xs = X{strokeIndex};
-       Ys = Y{strokeIndex};
-      
+       stroke = strokes{strokeIndex};      
        
-       nosePer = classifyStrokeWithFeatureAndRectangles(Xs, Ys, features{enumFeature('nose')});
+       nosePer = classifyStrokeWithFeatureAndRectangles(stroke, features{enumFeature('nose')});
        
-       mouthPer = classifyStrokeWithFeatureAndRectangles(Xs, Ys, features{enumFeature('mouth')});
+       mouthPer = classifyStrokeWithFeatureAndRectangles(stroke, features{enumFeature('mouth')});
        
-       eyePer = classifyStrokeWithFeatureAndRectangles(Xs, Ys, features{enumFeature('eye')});
+       eyePer = classifyStrokeWithFeatureAndRectangles(stroke, features{enumFeature('eye')});
        
-       facePer = classifyStrokeWithFeatureAndRectangles(Xs, Ys, features{enumFeature('face')});
+       facePer = classifyStrokeWithFeatureAndRectangles(stroke, features{enumFeature('face')});
        
        featurePercent = [];
        featurePercent(enumFeature('nose')) = nosePer;
@@ -39,11 +42,11 @@ function [ strokeType, features ] = clasifyStrokes( prefix )
     end    
 end
 
-function [ percent ] = classifyStrokeWithFeatureAndRectangles(Xs, Ys, rectangles)
+function [ percent ] = classifyStrokeWithFeatureAndRectangles(stroke, rectangles)
     percent = 0;
     
     for rectangleIndex = 1:size(rectangles,1);
-       newPercent = classifyStrokeWithFeatureAndRectangle(Xs, Ys, rectangles(rectangleIndex,:));
+       newPercent = classifyStrokeWithFeatureAndRectangle(stroke, rectangles(rectangleIndex,:));
        percent = max(newPercent, percent);
     end
 end

@@ -2,7 +2,7 @@ function [ returnColor ] = colorFromFeatureEnum( featureEnum )
 %UNTITLED6 Summary of this function goes here
 %   Detailed explanation goes here
     if ( featureEnum == 0 )
-        returnColor = 'black';
+        returnColor = 'white';
         
     elseif ( featureEnum == 1 )
         returnColor = 'm';

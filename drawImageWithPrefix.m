@@ -1,7 +1,7 @@
 function [  ] = drawImageWithPrefix( imagePrefix )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
-    [image_resize,X, Y] = getPositionsAdjusted(imagePrefix);
+    [image_resize,strokes] = getPositionsAdjusted(imagePrefix);
     %strokeTypes = clasifyStrokes(imagePrefix);
     strokeTypes = [];
     
@@ -9,11 +9,10 @@ function [  ] = drawImageWithPrefix( imagePrefix )
        image_resize = zeros(460,320);
     end
     
-    if size(X,1) > 0 
-        %imshow(image_resize);
+    if size(strokes,1) > 0 
         imshow(zeros(size(image_resize)));
         hold on
-        drawImageStrokes(X,Y, strokeTypes, 'none');
+        drawImageStrokes(strokes, strokeTypes, 'none');
         hold off;
     end
 end

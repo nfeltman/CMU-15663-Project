@@ -1,0 +1,19 @@
+%if ( ~exist('objectID','var') )
+%    [ objectID, drawerID, guesserID, modelID, newset, accuracy ] = drawAFriendMetaData( metaDataFile );
+%end
+
+if ( ~exist('strokeCell','var') )
+    strokeCell = runOnValidEntries(@getData);
+end
+
+if ( ~exist('strokeTypeCell','var'))
+   [strokeTypeCell, featureCell] = classifyAllStrokes(objectID); 
+end
+
+for drawingIndex = 1:10 
+    figure();
+    imshow(zeros(460,320));
+    hold on
+    drawImageStrokes(strokeCell{drawingIndex}, strokeTypeCell{drawingIndex}, 'face');
+    hold off
+end
