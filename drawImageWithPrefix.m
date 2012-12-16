@@ -5,11 +5,15 @@ function [  ] = drawImageWithPrefix( imagePrefix )
     %strokeTypes = clasifyStrokes(imagePrefix);
     strokeTypes = [];
     
+    if ( size(image_resize,1) == 0 )
+       image_resize = zeros(460,320);
+    end
+    
     if size(X,1) > 0 
-        imshow(image_resize);
+        %imshow(image_resize);
+        imshow(zeros(size(image_resize)));
         hold on
-        drawImageStrokes(X,Y, strokeTypes);
-%        drawImageWithXY(X, Y, strokeTypes);
+        drawImageStrokes(X,Y, strokeTypes, 'length');
         hold off;
     end
 end

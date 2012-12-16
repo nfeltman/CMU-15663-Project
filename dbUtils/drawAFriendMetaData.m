@@ -15,7 +15,7 @@ function [ objectID, drawerID, guesserID, modelID, newset, accuracy ] = drawAFri
     newset = strcmp('(null)',C{7});
     accuracy = cell2mat(C{8});
     
-    removeGame(objectID, drawerID, guesserID, modelID, newset, accuracy, 100003121308246, 1103941);
+    [ objectID, drawerID, guesserID, modelID, newset, accuracy] = removeGame(objectID, drawerID, guesserID, modelID, newset, accuracy, 100003121308246, 1103941);
 end
 
 function [ objectID, drawerID, guesserID, modelID, newset, accuracy] = removeGame( objectID, drawerID, guesserID, modelID, newset, accuracy, player1, player2)

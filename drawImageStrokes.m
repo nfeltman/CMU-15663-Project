@@ -1,7 +1,7 @@
-function [  ] = drawImageStrokes( X, Y, strokeTypes )
+function [  ] = drawImageStrokes( strokes, strokeTypes, drawType)
 %UNTITLED4 Summary of this function goes here
 %   Detailed explanation goes here
-    numberOfStrokes = size(X,1);
+    numberOfStrokes = size(strokes,1);
     numberOfColors = 32;
     strokeValue = ceil(numberOfStrokes/numberOfColors);
     colorMap = jet(32);
@@ -14,16 +14,36 @@ function [  ] = drawImageStrokes( X, Y, strokeTypes )
        % colorIndex = ceil(strokeIndex/strokeValue);
        % color = colorMap(colorIndex,:);
         %color = colorFromFeatureEnum(strokeType);
-       
-        X_stroke = X(strokeIndex);
-        X_stroke = X_stroke{1};
+        stroke = strokes{strokeIndex};
         
-        Y_stroke = Y(strokeIndex);
-        Y_stroke = Y_stroke{1};
+
+        X_stroke = stroke(:,1);        
+        Y_stroke = stroke(:,2);
         
-        color = 'yellow';
+        color = getColorWithDrawType(drawType, strokeTypes,stroke, strokeIndex);
         
         line(X_stroke, Y_stroke, 'Color', color );
         %imline(gca, X_stroke - offset_width, Y_stroke - offset_height);
    end
+end
+
+function [color] = getColorWithDrawType(drawType, strokeTypes, strokes, strokeIndex)
+    if strcmp(drawType, 'length')
+        colorMap = jet(20);
+        distance = cellDistance(strokes{strokeIndex});
+        distanceIndex = ceil(distance/50);
+        distanceIndex = max(distanceIndex, 1);
+        distanceIndex = min(distanceIndex, 20);
+        color = colorMap(distanceIndex,:);
+    elseif strcmp(drawType, 'cluster')
+        colorMap = jet(max(strokeTypes));
+        strokeType = strokeTypes(strokeIndex);
+        if isnan(strokeType) 
+            color = 'white';
+        else
+            color = colorMap(strokeTypes(strokeIndex),:);
+        end
+    else
+        color = 'black';
+    end
 end

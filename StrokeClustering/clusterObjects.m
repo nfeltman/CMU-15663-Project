@@ -4,8 +4,6 @@ function [ clusters, averageClusterFeatures ] = clusterObjects( clusterFeatures,
     clusters = kmeans(clusterFeatures,numberOfClusters, 'emptyaction', 'singleton');
     averageClusterFeatures = zeros(numberOfClusters, size(clusterFeatures, 2));
     
-    
-    
     for clusterIndex = 1:numberOfClusters
        singleCluster = clusterFeatures(clusters == clusterIndex, :);
        averageClusterFeatures(clusterIndex, :) = sum(singleCluster)/size(singleCluster,1);
@@ -16,6 +14,10 @@ function [ clusters, averageClusterFeatures ] = clusterObjects( clusterFeatures,
     
     figure();
     for clusterIndex = 1:numberOfClusters
+        size(objectIDs)
+        size(clusters == clusterIndex)
+        size(clusterFeatures)
+        
        singleCluster = objectIDs(clusters == clusterIndex, :);
        numberOfDrawing = 5;
        for drawingIndex = 1:min(numberOfDrawing, size(singleCluster,1));

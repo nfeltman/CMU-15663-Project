@@ -1,4 +1,8 @@
 function [ morePoints ] = splitLongSegs( points, maxLen )
+if ( size(points,1) == 0 )
+    morePoints = [];
+    return;
+end
 
 deltas = getSegDeltas(points);
 lens = sqrt(deltas.^2 * [1;1]);

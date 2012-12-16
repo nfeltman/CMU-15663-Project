@@ -8,13 +8,15 @@ function [ image_resize, X, Y ] = getPositionsAdjusted( imagePrefix )
     imageName = drawAFriendFileName(imagePrefix, 'P');
     strokeFile = drawAFriendFileName(imagePrefix, 'S');
 
-    if exist(imageName, 'file') && exist(strokeFile, 'file')
-        image = imread(imageName);
-        image = im2double(image);
-        
+    if  exist(strokeFile, 'file')
         [X, Y] = getPositions(strokeFile);
-        [image_resize, offset_width, offset_height] = aspectRatio(image, 320, 460);
-        [X,Y] = adjustStrokesLocations(X, Y, offset_width, offset_height);
+
+        if ( exist(imageName, 'file') )
+            image = imread(imageName);
+            image = im2double(image);
+            [image_resize, offset_width, offset_height] = aspectRatio(image, 320, 460);
+            [X,Y] = adjustStrokesLocations(X, Y, offset_width, offset_height);        
+        end       
     end
 end
 
