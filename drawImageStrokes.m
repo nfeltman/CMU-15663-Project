@@ -39,6 +39,6 @@ function [color] = getColorWithDrawType(drawType, strokeTypes, strokes, strokeIn
         strokeType = strokeTypes(strokeIndex);
         color = colorFromFeatureEnum(strokeType);        
     else
-        color = 'white';
+        color = 'yellow';
     end
 end
