@@ -1,36 +1,38 @@
-function [ features ] = getFaceFeatures( prefix )
+function [ features ] = getFaceFeatures( image )
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
-    face = [];
-    nose = [];
-    mouth = [];
-    eye = [];
-    eyePairSmall = [];
-    upperBody = [];
-    features = {};
-    imageName = drawAFriendFileName(prefix, 'P');
-    if ( exist(imageName, 'file') )
-        image = imread(imageName);
-        [image_resize,a,b] = aspectRatio(image, 320, 460);
-
-        nose = displayRectangleAroundFeature('Nose', image_resize);
-        upperBody =  displayRectangleAroundFeature('UpperBody', image_resize);
-        leftEye = displayRectangleAroundFeature('LeftEye', image_resize);
-        rightEye = displayRectangleAroundFeature('RightEye', image_resize);
-        eye = [leftEye;rightEye];
-        eyePairSmall = displayRectangleAroundFeature('EyePairSmall', image_resize);
-        mouth = displayRectangleAroundFeature('Mouth', image_resize);
-        face = displayRectangleAroundFeature('FrontalFaceCART', image_resize);
-
-        [ face, nose, eye, mouth ] = getBestFeatures( face, nose, eye, mouth );
-        
-        features{enumFeature('face')} = face;
-        features{enumFeature('nose')} = nose;
-        features{enumFeature('mouth')} = mouth;
-        features{enumFeature('eye')} = eye;
-        features{enumFeature('eyePair')} = eyePairSmall;
-        features{enumFeature('upperBody')} = upperBody; 
+    
+    if ischar(image)
+        imageName = drawAFriendFileName(image, 'P');
+        if ( exist(imageName, 'file') )
+            image = imread(imageName);
+            [image,~,~] = aspectRatio(image, 320, 460);
+        else
+            % consider returning something else?
+            error('Image file not found! (consult comments here for fixes)');
+            %features = {};
+            %return;
+        end
     end
+
+    nose = displayRectangleAroundFeature('Nose', image);
+    upperBody =  displayRectangleAroundFeature('UpperBody', image);
+    leftEye = displayRectangleAroundFeature('LeftEye', image);
+    rightEye = displayRectangleAroundFeature('RightEye', image);
+    eye = [leftEye;rightEye];
+    eyePairSmall = displayRectangleAroundFeature('EyePairSmall', image);
+    mouth = displayRectangleAroundFeature('Mouth', image);
+    face = displayRectangleAroundFeature('FrontalFaceCART', image);
+
+    [ face, nose, eye, mouth ] = getBestFeatures( face, nose, eye, mouth );
+
+    features = {};
+    features{enumFeature('face')} = face;
+    features{enumFeature('nose')} = nose;
+    features{enumFeature('mouth')} = mouth;
+    features{enumFeature('eye')} = eye;
+    features{enumFeature('eyePair')} = eyePairSmall;
+    features{enumFeature('upperBody')} = upperBody; 
 end
 
 function [bboxes ] = displayRectangleAroundFeature(feature, image)
