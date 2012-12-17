@@ -27,8 +27,10 @@ segsProcessed = 0;
 for k = 1:numStrokes,
     segs = strokes{k};
     n = size(segs,1);
-    allSegs(segsProcessed + (1:n), :) = segs;
-    segsProcessed = segsProcessed + n;
+    if n > 0,
+        allSegs(segsProcessed + (1:n), :) = segs;
+        segsProcessed = segsProcessed + n;
+    end
 end
 
 end

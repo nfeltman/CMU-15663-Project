@@ -19,8 +19,7 @@ function [ newStrokes ] = translateAndScaleFaceStrokes( features, strokes, faceS
     
     inStrokesBool = cellfun(@(x) classifyStrokeWithFeatureAndRectangle(x,faceFeature), strokes) > .5;
     inStrokes = strokes(inStrokesBool);
-    inStrokesAdjusted = adjustStrokesLocations(inStrokes, faceFeature(1,1), faceFeature(1,2));
-    newStrokes = cellfun(@(x) x/faceSize, inStrokesAdjusted, 'UniformOutput',false);
+    newStrokes = adjustStrokesLocations(inStrokes, faceFeature(1,1), faceFeature(1,2),faceSize/faceFeature(1,3));
 %    figure();
 %    drawImageStrokes(inStrokesAdjusted, [], 'yellow');
 end
