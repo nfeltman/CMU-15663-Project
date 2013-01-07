@@ -3,8 +3,8 @@ function [ U, score ] = findOptimumCone( X, Y )
 %   Detailed explanation goes here
 
 n = size(X,1);
-alpha = 4;
-beta = 0.5;
+alpha = 6;
+beta = 2;
 
 denom = sqrt(X.*X+Y.*Y) + beta;
 o = ones(1,size(X,2));
@@ -31,19 +31,22 @@ o = ones(1,size(X,2));
 % end
 
 U = zeros(n,2);
+score1 = zeros(n,1);
 for k = 1:n
     x = X(k,:)';
     y = Y(k,:)';
-    [~,~,V] = svds([x y],1);
-    U(k,:) = V';
+    [~,S,V] = svds([x y],2);
+    score1(k) = S(1,1) / S(2,2);
+    U(k,:) = V(:,1)';
 end
 
 ux = U(:,1);
 uy = U(:,2);
 
 dotProd = (ux*o).*Y - (uy*o).*X;
-score = mean((1-abs(dotProd)./denom).^alpha,2);
+score2 = mean((1-abs(dotProd)./denom).^alpha,2);
 
+score = score2;
 
 end
 
