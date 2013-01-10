@@ -30,23 +30,21 @@ o = ones(1,size(X,2));
 %     uy = uy./len;
 % end
 
-U = zeros(n,2);
-score1 = zeros(n,1);
-for k = 1:n
-    x = X(k,:)';
-    y = Y(k,:)';
-    [~,S,V] = svds([x y],2);
-    score1(k) = S(1,1) / S(2,2);
-    U(k,:) = V(:,1)';
-end
+a = sum(X.*X,2);
+b = sum(X.*Y,2);
+c = sum(Y.*Y,2);
 
-ux = U(:,1);
-uy = U(:,2);
+smaller_eig = (a+c - sqrt((a-c).^2+4*b.*b)) / 2;
+
+ux = a - smaller_eig;
+uy = b;
+len = sqrt(ux.*ux+uy.*uy);
+ux = ux./len;
+uy = uy./len;
+U = [ux, ux];
 
 dotProd = (ux*o).*Y - (uy*o).*X;
-score2 = mean((1-abs(dotProd)./denom).^alpha,2);
-
-score = score2;
+score = mean((1-abs(dotProd)./denom).^alpha,2);
 
 end
 
