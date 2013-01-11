@@ -20,13 +20,14 @@ targets = ['0RHlW7x4aM';
  [gridX,gridY] = meshgrid(1:320,1:460);
  grid = [mtov(gridX), mtov(gridY)];
  [X, Y] = findAllDeltas(grid, targets);
-[avg, smartAvg, score] = findSmartAverage(X,Y);
+[avg, score] = findSmartAverage(X,Y);
 magAvg = sqrt(sum(avg.*avg,2));
 
 magIm = reshape(magAvg,460,320);
 scoreIm = reshape(score,460,320);
 
 figure(3);
-imagesc(scoreIm);
+imagesc(min(max(scoreIm*2-0.75,0),1));
+%imagesc(scoreIm);
 fixAxes();
 colormap jet
