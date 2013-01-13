@@ -1,13 +1,22 @@
 
-B = getPositions(drawAFriendFileName('E5znYs8nrI','S'));
+B = getPositions(drawAFriendFileName('0RHlW7x4aM','S'));
 B = filterDuplicatePoints(B);
 B = cellmap(@(s)splitLongSegs(s,1),B);
 B = extractSegs(B);
 C = B;
 
-targets = ['4R56rYWZfQ';'9ggZFhGnnO';'9zkRrokirT';'dpzhjaPg5T'; ...
-    'EaevUQv9A7';'Hss07oWTUY';'mobldcT3bY';'qUeZYAL0IZ';'Syt9xsCCzO'; ...
-    'u1uPtY8qjV';'yOijC9dBmf';'Zety8LiUdt'];
+targets = [%'0RHlW7x4aM';
+'1aFLDuO2Ce';
+'1DkHXriZIC';
+'1v1roYjz7F';
+'1XyPtkJjQn';
+'1YcAkmhHLf';
+'4BCr0lJW4k';
+'4FzlxK3vbb';
+'4usQ92XqLh';
+'6dczux3SV9';
+'7EPmhiGXFW';
+'8KO4cdgbXS'];
 
 for iters = 1:10
     iters
