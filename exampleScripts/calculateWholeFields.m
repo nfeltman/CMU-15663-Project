@@ -9,6 +9,6 @@ magIm = reshape(magAvg,460,320);
 scoreIm = reshape(score,460,320);
 
 figure(1);
-imagesc(log(0.2+magIm));
+imagesc(scoreIm);
 fixAxes();
 colormap jet

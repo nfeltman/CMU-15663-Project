@@ -16,7 +16,7 @@ function onButtonDown(X,Y)
     y = Y(loc*[460;1],:);
     
     len = sqrt(x.*x+y.*y);
-    weight = exp(-len.*len/(mean(len).^2));
+    weight = exp(-len.*len/(mean(len).^2)/2);
     a = weightedAvg(x.*x,weight);
     b = weightedAvg(x.*y,weight);
     c = weightedAvg(y.*y,weight);
@@ -27,13 +27,20 @@ function onButtonDown(X,Y)
     fancy_len = sqrt((x.*ux + y.*uy).^2./l2 + (x.*uy - y.*ux).^2./s2);
     [valid, cutoff] = filterOutliers(fancy_len,1);
     
+    
+    [ meanX, meanY, majorVar, minorVar, axisX, axisY ] = learnWeighting(x,y,weight);
+    majorStd = sqrt(majorVar);
+    minorStd = sqrt(minorVar);
+    
     figure(2);
-    gscatter(x,y,(~valid)+1,'bg','..',5); hold on;
-    gscatter([0 mean(x) mean(x(valid))],[0 mean(y) mean(y(valid))],[1 2 3],'rgb','xxx');
+    gscatter(x,y,(~valid)+1,'bb','..',5); hold on;
+    gscatter([0 mean(x) mean(x(valid)) meanX],[0 mean(y) mean(y(valid)) meanY],[1 2 3 4],'cgbr','xxxx');
     
     l = sqrt(l2);
     s = sqrt(s2);
-    plot([0, 0; u(1)*l, -u(2)*s],[0, 0; u(2)*l, u(1)*s],'r'); hold off;
+    
+    %plot([0, 0; u(1)*l, -u(2)*s],[0, 0; u(2)*l, u(1)*s],'c'); 
+    plot([0, 0; axisX*majorStd, -axisY*minorStd]+meanX,[0, 0; axisY*majorStd, axisX*minorStd]+meanY,'r'); hold off;
     axis equal
     set(gca,'YDir','reverse');
     
