@@ -8,4 +8,4 @@ magAvg = sqrt(sum(avg.*avg,2));
 magIm = reshape(magAvg,460,320);
 scoreIm = reshape(score,460,320);
 
-queryNearests(scoreIm,X,Y);
+queryNearests(log(0.2+(scoreIm)),X,Y);

@@ -7,9 +7,19 @@ o = ones(1,size(X,2));
 
 beta = 5;
 dists = sqrt(X.*X+Y.*Y);
-meanDist = mean(dists,2);
-stdDist = std(dists,[],2);
-valid = (dists-meanDist*o)./(stdDist*o) < 2;
+
+weight = exp(-dists.*dists./(mean(dists,2).^2 * o));
+% weight = ones(size(X));
+a = weightedAvg(X.*X,weight);
+b = weightedAvg(X.*Y,weight);
+c = weightedAvg(Y.*Y,weight);
+[l2, s2, u ] = smallEigs(a,b,c);
+ux = u(:,1);
+uy = u(:,2);
+
+fancy_len = sqrt((X.*(ux*o) + Y.*(uy*o)).^2./(l2*o) + (X.*(uy*o) - Y.*(ux*o)).^2./(s2*o));
+
+valid = filterOutliers(fancy_len, 1);
 
 validCount = sum(valid,2);
 % avgX = mean(X,2);
@@ -19,24 +29,12 @@ avgY = sum(Y.*valid,2)./validCount;
 avg = [avgX, avgY];
 
 
-denom = dists.^2 + beta;
-
-a = mean(X.*X,2);
-b = mean(X.*Y,2);
-c = mean(Y.*Y,2);
-[l, s, U ] = smallEigs(a,b,c);
-ux = U(:,1);
-uy = U(:,2);
-
-distStd = sqrt(sum((dists-(mean(dists,2)*o)).^2,2));
-
 dotProd = (ux*o).*X + (uy*o).*Y;
-%score = mean((1-(dotProd.*dotProd)./denom).^4,2)./(1+ 0.5*mean(dists,2)./distStd);
-score = mean((dotProd.*dotProd)./denom,2);
-% score = mean((1-(1)./denom).^4,2);
-%score = 1./(1+ mean(dists,2)./distStd);
-%score = 1./(10+sqrt(l));
-score = sqrt(l)-sqrt(s+l);
+a_part = 1-sqrt(s2./l2);
+vbar_part = weightedAvg(dotProd,weight);
+dbar_part = weightedAvg(abs(dotProd),weight);
+b_part = sqrt(weightedAvg((dotProd-vbar_part*o).^2, weight));
+score =  b_part;
 
 end
 
