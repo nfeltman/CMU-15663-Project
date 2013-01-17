@@ -8,7 +8,6 @@ d = size(X,2);
 weight = bootstrap_weight;
 
 for k = 1:10
-    k
     % M step
     meanX = weightedAvg(X,weight);
     meanY = weightedAvg(Y,weight);
