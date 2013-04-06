@@ -7,7 +7,7 @@ for k = 1:n,
     A = getPositions(drawAFriendFileName(targets(k,:),'S'));
     A = filterDuplicatePoints(A);
     A = cellmap(@(s)splitLongSegs(s,substepping),A);
-    A = vertcatcells(A);
+    A = vertCatCells(A);
     allDeltas(:,[k, k+n]) = getNearestDeltaSample(sampleLocations,A);
 end
 

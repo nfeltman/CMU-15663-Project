@@ -40,7 +40,7 @@ weight = exp(-0.5*dists.*dists./(mean(dists,2).^2 * o));
 % distStd = sqrt(weightedAvg((dists-distBar*o).^2,weight));
 % score = log(distBar./distStd+10);
 
-[ meanX, meanY, majorVar, minorVar] = learnWeighting( X, Y, weight );
+[ meanX, meanY] = learnWeighting( X, Y, weight );
 avg = [meanX, meanY];
 score = log(sqrt(meanX.^2 + meanY.^2)+0.1);
 %score = log(sqrt(meanX.^2 + meanY.^2)./sqrt(majorVar)+0.1);
