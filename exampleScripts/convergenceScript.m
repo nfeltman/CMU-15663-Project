@@ -1,11 +1,12 @@
 numberOfPictures = size(X,2);
-numberOfRuns = 1;
+numberOfRuns = 100;
 sumSquaredArray = zeros(numberOfRuns,numberOfPictures);
 
-tic
 
 % for i = 100:numberOfPictures
-for i = 25:25
+tic
+
+for i = 1:50
     disp('picture')
     disp(i)
    for run = 1:numberOfRuns 
@@ -21,14 +22,13 @@ for i = 25:25
         
         final = numerator ./ denominator;
         
-        figure(1);
-            finalImage = reshape(final,460,320);
+        %figure(1);
+        %    finalImage = reshape(final,460,320);
 
-            imagesc(log(finalImage+.1));
-%            imagesc(log(magIm+0.1)); 
-hold on
-        fixAxes();
-        hold off
+         %   imagesc(log(finalImage+.1));
+    %hold on
+    %    fixAxes();
+    %    hold off
                 
         total = mean(final)
         sumSquaredArray(run, i) = total;
@@ -36,4 +36,6 @@ hold on
    
    %disp(floor(sumSquaredArray(:,1:i)))
 end
+
+toc
 
