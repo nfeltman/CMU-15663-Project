@@ -1,21 +1,30 @@
 numberOfPictures = size(X,2);
-numberOfRuns = 100;
-sumSquaredArray = zeros(numberOfRuns,numberOfPictures);
+%numberOfRuns = 3;
 
+allResults = cell(numberOfPictures,1);
 
 % for i = 100:numberOfPictures
 tic
-
-for i = 1:50
-    disp('picture')
-    disp(i)
+parfor i = 1:numberOfPictures
+   
+    if i <= 20,
+        numberOfRuns = 100;
+    elseif i <= 50,
+        numberOfRuns = 20;
+    elseif i <= 100
+        numberOfRuns = 10;
+    else
+        numberOfRuns = 3;
+    end
+    sumSquaredArray = zeros(numberOfRuns,1);
+    
+   fprintf('picture %i\n', i);
    for run = 1:numberOfRuns 
-       disp('run')
-       disp(run)
+       %fprintf('run %i\n', run);
         randomIndex = randperm(numberOfPictures,i);
         subX = X(:,randomIndex);
         subY = Y(:,randomIndex);
-        [subAvg, subScore] = findSmartAverage(subX,subY);
+        [subAvg, ~] = findSmartAverage(subX,subY);
         difference = subAvg - avg;
         numerator = mag(difference);
         denominator = mag(subAvg) + mag(avg);
@@ -30,9 +39,11 @@ for i = 1:50
     %    fixAxes();
     %    hold off
                 
-        total = mean(final)
-        sumSquaredArray(run, i) = total;
+        total = mean(final);
+        sumSquaredArray(run) = total;
    end
+   
+   allResults{i} = sumSquaredArray;
    
    %disp(floor(sumSquaredArray(:,1:i)))
 end

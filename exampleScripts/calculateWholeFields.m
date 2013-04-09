@@ -1,7 +1,7 @@
 
 [gridX,gridY] = meshgrid(1:320,1:460);
 grid = [mtov(gridX), mtov(gridY)];
-[X, Y] = findAllDeltas(grid, prefixesBO,0.4);
+[X, Y] = findAllDeltas(grid, prefixesBP,0.4);
 [avg, score] = findSmartAverage(X,Y);
 
 magAvg = sqrt(sum(avg.*avg,2));
