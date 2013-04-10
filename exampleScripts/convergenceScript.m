@@ -26,13 +26,7 @@ parfor i = 1:numberOfPictures
         subY = Y(:,randomIndex);
         [subAvg, ~] = findSmartAverage(subX,subY);
         
-        
-%         difference = subAvg - avg;
-%         numerator = mag(difference);
-%         denominator = mag(subAvg) + mag(avg);
-%         
-%         final = numerator ./ denominator;
-        
+       
         %figure(1);
         %    finalImage = reshape(final,460,320);
 
